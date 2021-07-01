@@ -1,0 +1,185 @@
+body{
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  background-color: #d5ecc2;
+  background-image: url("https://www.transparenttextures.com/patterns/asfalt-dark.png");
+  font-family: "Ubuntu", sans-serif;
+/* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
+}
+h1, h2, h3, h4, h5, h6{
+  font-family: "Roboto", sans-serif;
+}
+nav{
+  position: fixed;
+  background-color: #98ddca;
+  padding: 0;
+  margin: 0;
+  margin-bottom: 50px;
+}
+a{
+  text-decoration: none;
+}
+.nav-link{
+  font-size: 18px;
+  color: #fa8884;
+  margin-right: 20px;
+}
+.nav-link:hover{
+  text-decoration: underline;
+  font-weight: 500;
+  color: #f7807c;
+}
+.brand-name{
+  font-family: 'Dancing Script', cursive;
+  color: #fa8884;
+}
+.navbar-brand:hover{
+  color: #fa8884;
+}
+.navbar-toggler{
+  color: #fa8884;
+}
+.navbar-toggler-icon{
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(250, 136, 132)' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e")
+}
+.navbar-toggler:focus{
+  box-shadow: none;
+}
+.btn-custom{
+  color:#fff;
+  background-color:#fa8884;
+}
+.btn-custom:hover{
+  text-decoration: underline;
+  font-weight: 500;
+  color:#fff;
+  background-color:#fa8884;
+}
+.text-align{
+  text-align: center;
+}
+/*signup, signin pages*/
+.middle{
+  margin: 7px auto;
+}
+.align{
+  margin: 50px auto;
+}
+.align div button {
+  display: block;
+  width: 100%;
+  margin: auto;
+}
+#passwordMessage{
+  background-color: #faeceb;
+  display: none;
+  padding: 20px;
+  margin-bottom: 16px;
+  position: relative;
+}
+#passwordMessage p{
+  padding: 5px 25px;
+}
+.valid {
+  color: #008000;
+}
+.valid:before {
+  position: relative;
+  left: -20px;
+  content: "✔";
+}
+.invalid {
+  color: #ff0000;
+}
+.invalid:before {
+  position: relative;
+  left: -20px;
+  content: "✖";
+}
+.text-in-line{
+  overflow: hidden;
+  text-align: center;
+}
+.text-in-line:before, .text-in-line:after {
+  background-color: #000000;
+  content: "";
+  display: inline-block;
+  height: 2px;
+  position: relative;
+  vertical-align: middle;
+  width: 50%;
+}
+.text-in-line:before {
+  right: 0.5em;
+  margin-left: -50%;
+}
+.text-in-line:after {
+  left: 0.5em;
+  margin-right: -50%;
+}
+.right-text{
+  padding: 0;
+  text-align: right;
+}
+.fa-1-5x{
+  font-size: 1.5em;
+}
+/* contact page styling */
+.contact-style{
+  font-weight: 700;
+}
+.top-gap{
+  margin-top: 40px;
+}
+.btn-style{
+  margin-top: 20px;
+}
+.form{
+  margin-top: 50px;
+  margin-bottom: 50px;
+  padding: 30px;
+  border-radius: 25px;
+  background-color: #ffd3b4;
+}
+.form-control{
+  display:block;
+  width:100%;
+  padding:.375rem .75rem;
+  font-size:1rem;
+  font-weight:400;
+  line-height:1.5;
+  color:#212529;
+  background-color:#fff;
+  border:1px solid #ced4da;
+}
+.form-control:focus{
+  color:#212529;
+  background-color:#fff;
+  border-color:#86b7fe;
+  outline:0;
+  box-shadow:0 0 0 .25rem rgba(13,110,253,.25);
+}
+.required-field{
+  display: inline;
+  color: #ff0000;
+}
+/*new page styling*/
+.top-input{
+  border-radius: 0;
+  border-top-left-radius: .25rem;
+  border-top-right-radius: .25rem;
+}
+.middle-input{
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-top-width: 0;
+  border-bottom-width: 0;
+}
+.bottom-input{
+  border-radius: 0;
+  border-bottom-left-radius: .25rem;
+  border-bottom-right-radius: .25rem;
+}
