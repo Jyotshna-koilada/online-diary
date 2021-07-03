@@ -1,5 +1,6 @@
 body{
   padding: 0;
+  padding-top: 100px;
   margin: 0;
   height: 100%;
   background-color: #d5ecc2;
@@ -11,11 +12,10 @@ h1, h2, h3, h4, h5, h6{
   font-family: "Roboto", sans-serif;
 }
 nav{
-  position: fixed;
   background-color: #98ddca;
   padding: 0;
   margin: 0;
-  margin-bottom: 50px;
+  margin-bottom: 100px;
 }
 a{
   text-decoration: none;
@@ -59,17 +59,89 @@ a{
 .text-align{
   text-align: center;
 }
+/*memories page*/
+.memories-title{
+  text-align: center;
+  font-family: 'Satisfy', cursive;
+  color:#fa8884;
+  opacity: 0.8;
+}
+.memory-display{
+  display: inline-block;
+  margin: 1%;
+  margin-top: 3%;
+  margin-right: 3%;
+}
+.memory-date{
+  text-align: center;
+  border-radius: 25px 25px 0 0;
+  word-wrap: break-word;
+  background-color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 0;
+  padding-top: 2%;
+  width: 300px;
+  height: 40px;
+}
+.memory-description{
+  text-align: center;
+  border-radius: 0;
+  word-wrap: break-word;
+  background-color: #fff;
+  opacity: 0.6;
+  margin-bottom: 0;
+  padding: 3% 2% 2% 2%;
+  width: 300px;
+  height: 130px;
+}
+.icons{
+  display: flex;
+  justify-content: flex-end;
+  background-color: #fff;
+  border-radius: 0 0 25px 25px;
+  margin: 0;
+  width: 300px;
+  height: 40px;
+}
+.icons .fa{
+  font-size: 1.5em;
+  color: #fa8884;
+  margin: auto 10px;
+  padding-top: 3px;
+}
+.modal{
+  text-align: center;
+}
+.add-memory{
+	position:fixed;
+  right: 40px;
+  bottom: 0px;
+	padding:0px;
+	margin:0px;
+}
+.add-memory ul{
+  list-style:none;
+}
+.add-memory ul li{
+	padding:10px;
+	font-size:15px;
+	transition:all 0.5s ease-in-out;
+	border-radius: 50%;
+	background-color:#fa8884;
+}
+.add-memory ul li:hover{
+    box-shadow:0px 0px 20px #828181;
+}
+.add-memory ul li:hover .fa{
+    margin:8px;
+}
+.add-memory ul li .fa{
+  color:#fff;
+  transition:all 0.5s ease-in-out;
+  margin:5px;
+}
 /*signup, signin pages*/
 .middle{
   margin: 7px auto;
-}
-.align{
-  margin: 50px auto;
-}
-.align div button {
-  display: block;
-  width: 100%;
-  margin: auto;
 }
 #passwordMessage{
   background-color: #faeceb;
@@ -97,27 +169,6 @@ a{
   left: -20px;
   content: "✖";
 }
-.text-in-line{
-  overflow: hidden;
-  text-align: center;
-}
-.text-in-line:before, .text-in-line:after {
-  background-color: #000000;
-  content: "";
-  display: inline-block;
-  height: 2px;
-  position: relative;
-  vertical-align: middle;
-  width: 50%;
-}
-.text-in-line:before {
-  right: 0.5em;
-  margin-left: -50%;
-}
-.text-in-line:after {
-  left: 0.5em;
-  margin-right: -50%;
-}
 .right-text{
   padding: 0;
   text-align: right;
@@ -142,27 +193,16 @@ a{
   border-radius: 25px;
   background-color: #ffd3b4;
 }
-.form-control{
-  display:block;
-  width:100%;
-  padding:.375rem .75rem;
-  font-size:1rem;
-  font-weight:400;
-  line-height:1.5;
-  color:#212529;
-  background-color:#fff;
-  border:1px solid #ced4da;
-}
-.form-control:focus{
-  color:#212529;
-  background-color:#fff;
-  border-color:#86b7fe;
-  outline:0;
-  box-shadow:0 0 0 .25rem rgba(13,110,253,.25);
-}
 .required-field{
   display: inline;
   color: #ff0000;
+}
+/*success, failure pages*/
+.jumbotron{
+  background-color: rgba(250, 136, 132, 0.8);
+  color: #000;
+  border-radius: 25px;
+  padding: 50px;
 }
 /*new page styling*/
 .top-input{

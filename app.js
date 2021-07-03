@@ -3,10 +3,12 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const getDate = require(__dirname + '/public/js/date.js');
-const bcrpyt = require('bcrypt');
+const bcrypt = require('bcrypt');
 const session = require('express-session');
 const passport = require('passport');
 const passportLocalMongoose = require('passport-local-mongoose');
+const nodemailer = require('nodemailer');
+const multiparty = require('multiparty');
 
 const app = express();
 
@@ -22,6 +24,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 mongoose.connect('mongodb://localhost:27017/memoriesDB', {
+  useFindAndModify: false,
+  useCreateIndex: true,
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
@@ -33,17 +37,13 @@ const personMemoriesSchema = new mongoose.Schema({
 });
 
 const personSchema = new mongoose.Schema({
-  firstName: {type: String, required: true},
-  lastName: {type: String, default: ''},
-  password: {type: String, required: true},
-  memories: {type: personMemoriesSchema, default: {}}
+  personName: String,
+  email: String,
+  password: String,
+  memories: [personMemoriesSchema]
 });
 
-personMemoriesSchema.plugin(passportLocalMongoose);
-personMemoriesSchema.plugin(findOrCreate);
-
 personSchema.plugin(passportLocalMongoose);
-personSchema.plugin(findOrCreate);
 
 const Person = mongoose.model("Person", personSchema);
 const PersonMemories = mongoose.model("PersonMemories", personMemoriesSchema);
@@ -58,67 +58,165 @@ passport.deserializeUser((id, done) => {
   });
 });
 
-app.get("/index", (req, res) => {
-  res.render("index");
-})
+let loggedInPerson = "", editMemoryId = "";
+
 app.get("/", (req, res) => {
   res.render("home");
-})
-app.get("/new", (req, res) => {
-  res.render("new", {date: getDate()});
+});
+
+app.get("/memories", (req, res) => {
+  if (req.isAuthenticated()){
+    Person.findById(loggedInPerson, (err, person) => {
+      if(!err){
+        res.render("memories", {memories: person.memories});
+      }
+    })
+  }
+  else
+    res.redirect("/signin");
 })
 
-app.route("/signin")
+app.get("/new", (req, res) => {
+  if(req.isAuthenticated())
+    res.render("new", {date: getDate()});
+  else
+    res.redirect("/signin");
+})
+app.post("/new", (req, res) => {
+  const newMemory = new PersonMemories({
+    date: req.body.date,
+    words: req.body.word,
+    description: req.body.description
+  })
+  Person.findByIdAndUpdate(loggedInPerson, {$push: {memories: newMemory}}, (err, person) => {
+    if(!err)
+      res.redirect("/memories");
+    else
+      res.redirect("/new");
+  })
+});
+
+app.post("/edit-this-memory", (req, res) => {
+  editMemoryId = req.body.memoryId;
+  res.redirect("edit");
+})
+app.get("/edit", (req, res) => {
+  Person.findOne({_id: loggedInPerson, "memories._id": editMemoryId}, (err, person) => {
+    if(!err){
+      let index = -1;
+      for(let i=0 ; i<person.memories.length ; i++){
+        if(person.memories[i]._id == editMemoryId){
+          index = i;
+          break;
+        }
+      }
+      res.render("edit", {memory: person.memories[index]});
+    }
+  })
+})
+app.post("/edit", (req, res) => {
+  Person.findOneAndUpdate({_id: loggedInPerson, "memories._id": editMemoryId},
+                          {$set: {"memories.$.date": req.body.date,
+                                  "memories.$.words": req.body.words,
+                                  "memories.$.description": req.body.description}},
+                          (err, result) => {
+                              res.redirect("/memories");
+  });
+
+})
+app.post("/delete", (req, res) => {
+  Person.updateOne({_id: loggedInPerson}, {$pull: {memories: { _id: req.body.memoryId}}}, (err, result) => {
+    if(!err){
+      res.redirect("/memories");
+    }
+  })
+})
+app.get("/signin", (req, res) => {
+  res.render("signin");
+})
+app.post("/signin", passport.authenticate('local', {failureRedirect: "/signup"}), (req, res) => {
+  Person.findOne({username: req.body.username}, (err, person) => {
+    loggedInPerson = person._id;
+  })
+  res.redirect("/memories");
+});
+
+app.route("/signup")
   .get((req, res) => {
-    res.render("signin");
+    res.render("signup");
   })
   .post((req, res) => {
-    const person = new Person({
-      firstName: req.body.firstname,
-      lastName: req.body.lastname,
-      password: req.body.password
+    const newPerson = new Person({
+      personName: req.body.fname+" "+req.body.lname,
+      username: req.body.email
     });
-
-    req.login(person, (err) => {
-      if (!err){
-        passport.authenticate("local")(req, res, () => {
-          if (!err) {
-            res.redirect("/");
-          }
-        });
+    Person.register(newPerson, req.body.password, (err, user) => {
+      if (err) {
+        res.redirect("/signup");
+      }
+      else{
+        res.redirect("/signin");
       }
     });
   })
 
-  app.route("/signup")
-    .get((req, res) => {
-      res.render("signup");
-    })
-    .post((req, res) => {
-      let userPassword = req.body.password;
-      bcrypt.hash(myPlaintextPassword, saltRounds, function(err, hash) {
-        // Store hash in your password DB.
-      });
-      Person.register({firstname: req.body.firstname}, req.body.password, (err, user) => {
-        if (err) {
-          res.redirect("/signup");
-        }
-        else{
-          User.authenticate(req.body.username, req.body.password, (err, result) => {
-            if (!err) {
-              res.redirect("/");
-            }
-          });
-        }
-      });
-    })
-
+const transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 587,
+  auth: {
+    user: process.env.EMAIL,
+    pass: process.env.PASS,
+  },
+});
 app.get("/contact", (req, res) => {
-  res.render("contact",{navpage: "navbar"});
+  if(req.isAuthenticated())
+    res.render("contact",{navpage: "navbar"});
+  else{
+    res.render("contact",{navpage: "loggedout-navbar"});
+  }
 })
-app.get("/logout", (req, res) => {
+app.post("/contact", (req, res) => {
+  let form = new multiparty.Form();
+  let data = {};
+  form.parse(req, function (err, fields) {
+    Object.keys(fields).forEach(function (property) {
+      data[property] = fields[property].toString();
+    });
+
+    const mail = {
+      from: data.name,
+      to: process.env.EMAIL,
+      subject: `Regarding Mirror website: ${data.service}`,
+      text: `Name: ${data.name} \nEmail: ${data.email} \nPhone Number: ${data.number} \nMessage regarding the service: ${data.message}`,
+    };
+
+    transporter.sendMail(mail, (err, data) => {
+        if(!err)
+            res.redirect("success");
+        else
+            res.redirect("failure");
+    });
+  });
+})
+
+app.get("/success", (req, res) => {
+  if(req.isAuthenticated())
+    res.render("success",{navpage: "navbar"});
+  else{
+    res.render("success",{navpage: "loggedout-navbar"});
+  }
+})
+app.get("/failure", (req, res) => {
+  if(req.isAuthenticated())
+    res.render("failure",{navpage: "navbar"});
+  else{
+    res.render("failure",{navpage: "loggedout-navbar"});
+  }
+})
+
+app.get("/signout", (req, res) => {
   req.logout();
-  res.redirect("/index");
+  res.redirect("/");
 })
 
 app.listen(process.env.PORT || 3000, () => {

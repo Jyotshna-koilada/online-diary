@@ -1,11 +1,12 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Ubuntu:wght@300;400;500;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Ubuntu:wght@300;400;500;700&family=Dancing+Script:wght@700&family=Satisfy&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
-    <link rel="shortcut icon" type="image/png" href="../img/logo-removebg-preview.png">
+    <link rel="shortcut icon" type="image/png" href="../img/logo.png">
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg">
+    <nav class="navbar navbar-expand-lg fixed-top">
       <div class="container">
         <a class="navbar-brand" href="/"><h1 class="brand-name">Mirror</h1></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#MyNavbar" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -14,13 +15,13 @@
         <div class="collapse navbar-collapse" id="MyNavbar">
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="/">Home</a>
+              <a class="nav-link active" aria-current="page" href="/memories">Home</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/contact">Contact Us</a>
             </li>
             <li class="nav-item">
-              <button class="btn btn-custom nav-link" href="#">Log Out</button>
+              <a class="btn btn-custom nav-link" href="/signout" role="button">Log Out</a>
             </li>
           </ul>
         </div>

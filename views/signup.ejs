@@ -5,76 +5,59 @@
     <title>Sign Up</title>
     <%- include('partials/loggedout-navbar.ejs'); %>
     <div class="container">
-      <div class="row">
-        <div class="col-lg-6">
-          <div class="container-fluid">
-            <form class="form" action="/home" method="post">
-              <div class="row">
-                <div class="mb-3 col-lg-6">
-                  <label for="firstName" class="form-label">First Name <p class="required-field">*</p></label>
-                  <input required type="text" class="form-control" name="fname" id="firstName" placeholder="Enter Your First Name">
-                </div>
-                <div class="mb-3 col-lg-6">
-                  <label for="lastName" class="form-label">Last Name</label>
-                  <input type="text" class="form-control" name="lname" id="lastName" placeholder="Enter Your Last Name">
-                </div>
+      <div class="col-12 col-md-8 offset-md-2">
+        <div class="container-fluid">
+          <form class="form" action="/signup" method="post">
+            <div class="row">
+              <div class="mb-3 col-lg-6">
+                <label for="firstName" class="form-label">First Name <p class="required-field">*</p></label>
+                <input required type="text" class="form-control" name="fname" id="firstName" placeholder="Enter Your First Name">
               </div>
-              <div class="mb-3">
-                <label for="inputEmail" class="form-label">Email address <p class="required-field">*</p></label>
-                <input required type="email" class="form-control" name="email" id="inputEmail" placeholder="Enter Your Email Address">
+              <div class="mb-3 col-lg-6">
+                <label for="lastName" class="form-label">Last Name</label>
+                <input type="text" class="form-control" name="lname" id="lastName" placeholder="Enter Your Last Name">
               </div>
-              <div class="mb-3">
-                <label for="inputPassword" class="form-label">Password <p class="required-field">*</p></label>
-                <div class="row">
-                  <div class="col-10">
-                    <input required type="password" class="col-10 form-control" name="password" pattern="(?=.*[-_])(?!.*[\s])(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{8,15}" id="inputPassword" placeholder="Enter Your Password">
-                  </div>
-                  <div class="col-2 middle">
-                    <i onclick="togglePasswordVisibility(this, 'inputPassword')" class="col-2 fa fa-eye fa-1-5x"></i>
-                  </div>
-                </div>
-              </div>
-              <div id="passwordMessage">
-                <h4>Password must contain the following:</h4>
-                <p id="capital" class="invalid">An <b>uppercase(capital)</b> letter</p>
-                <p id="letter" class="invalid">A <b>lowercase</b> letter</p>
-                <p id="digit" class="invalid">A <b>digit</b> (0-9)</p>
-                <p id="no-space" class="valid">No <b>white spaces</b></p>
-                <p id="hyphen-underscore" class="invalid">A <b>hyphen (-) or underscore (_)</b></p>
-                <p id="length" class="invalid">Length of <b>8-15</b>characters</p>
-              </div>
-              <div class="mb-3">
-                <label for="confirmPassword" class="form-label">Confirm Password <p class="required-field">*</p></label>
-                <div class="row">
-                  <div class="col-10">
-                    <input required type="password" class="form-control" name="confirmpassword" id="confirmPassword" placeholder="Confirm Your Password">
-                  </div>
-                  <div class="col-2 middle">
-                    <i onclick="togglePasswordVisibility(this, 'confirmPassword')" class="col-2 fa fa-eye fa-1-5x"></i>
-                  </div>
-                </div>
-              </div>
-              <button type="submit" class="btn btn-custom btn-style">Sign Me Up !!</button>
-              <div class="container-fluid right-text">
-                <a href="/signin">Have an account already? Sign in here</a>
-              </div>
-            </form>
-          </div>
-        </div>
-
-        <div class="col-lg-6">
-          <div class="align">
-            <p class="text-in-line">Sign me up with</p>
-            <div class="container">
-              <button type="button" class="btn btn-block btn-lg btn-social btn-google"><i class="fa fa-google fa-2x"></i>  Sign Up with Google</button>
-              <br>
-              <button type="button" class="btn btn-block btn-lg btn-social btn-facebook"><i class="fa fa-facebook-f fa-2x"></i> Sign Up with Facebook</button>
-              <br>
-              <button type="button" class="btn btn-block btn-lg btn-social btn-instagram"><i class="fa fa-instagram fa-2x"></i></i> Sign Up with Instagram</button>
-              <br>
-              <button type="button" class="btn btn-block btn-lg btn-social btn-twitter"><i class="fa fa-twitter fa-2x"></i></i> Sign Up with Twitter</button>
             </div>
-          </div>
+            <div class="mb-3">
+              <label for="inputEmail" class="form-label">Email address <p class="required-field">*</p></label>
+              <input required type="email" class="form-control" name="email" id="inputEmail" placeholder="Enter Your Email Address">
+            </div>
+            <div class="mb-3">
+              <label for="inputPassword" class="form-label">Password <p class="required-field">*</p></label>
+              <div class="row">
+                <div class="col-10">
+                  <input required type="password" class="col-10 form-control" name="password" pattern="(?=.*[-_])(?!.*[\s])(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{8,15}" id="inputPassword" placeholder="Enter Your Password">
+                </div>
+                <div class="col-2 middle">
+                  <i onclick="togglePasswordVisibility(this, 'inputPassword')" class="col-2 fa fa-eye fa-1-5x"></i>
+                </div>
+              </div>
+            </div>
+            <div id="passwordMessage">
+              <h4>Password must contain the following:</h4>
+              <p id="capital" class="invalid">An <b>uppercase(capital)</b> letter</p>
+              <p id="letter" class="invalid">A <b>lowercase</b> letter</p>
+              <p id="digit" class="invalid">A <b>digit</b> (0-9)</p>
+              <p id="no-space" class="valid">No <b>white spaces</b></p>
+              <p id="hyphen-underscore" class="invalid">A <b>hyphen (-) or underscore (_)</b></p>
+              <p id="length" class="invalid">Length of <b>8-15</b>characters</p>
+            </div>
+            <div class="mb-3">
+              <label for="confirmPassword" class="form-label">Confirm Password <p class="required-field">*</p></label>
+              <div class="row">
+                <div class="col-10">
+                  <input required type="password" class="form-control" name="confirmpassword" id="confirmPassword" placeholder="Confirm Your Password">
+                </div>
+                <div class="col-2 middle">
+                  <i onclick="togglePasswordVisibility(this, 'confirmPassword')" class="col-2 fa fa-eye fa-1-5x"></i>
+                </div>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-custom btn-style">Sign Me Up !!</button>
+            <div class="container-fluid right-text">
+              <a href="/signin">Have an account already? Sign in here</a>
+            </div>
+          </form>
         </div>
       </div>
     </div>
