@@ -59,6 +59,18 @@ a{
 .text-align{
   text-align: center;
 }
+/*take a tour*/
+.block{
+  background-color: rgba(250, 136, 132, 0.7);
+  border-radius: 25px;
+  height: 50vh;
+  padding: 5vh;
+  margin: 5vh auto;
+}
+.block-image{
+  width: 45vw;
+  height: 40vh;
+}
 /*memories page*/
 .memories-title{
   text-align: center;
