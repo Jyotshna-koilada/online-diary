@@ -23,7 +23,8 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-mongoose.connect('mongodb://localhost:27017/memoriesDB', {
+const uri = "mongodb+srv://"+process.env.USER+":"+process.env.PASSWORD+"@cluster0.8g9lv.mongodb.net/memoriesDB?retryWrites=true&w=majority"
+mongoose.connect(uri, {
   useFindAndModify: false,
   useCreateIndex: true,
   useNewUrlParser: true,
@@ -96,23 +97,13 @@ app.post("/new", (req, res) => {
   })
 });
 
-app.post("/edit-this-memory", (req, res) => {
-  editMemoryId = req.body.editMemoryId;
-  res.redirect("edit");
-})
-app.get("/edit", (req, res) => {
-  Person.findOne({_id: loggedInPerson, "memories._id": editMemoryId}, (err, person) => {
+app.get("/edit/:id", (req, res) => {
+  editMemoryId = req.params.id;
+  Person.findOne({_id: loggedInPerson, "memories._id": editMemoryId}, {"memories.$": 1}, (err, person) => {
     if(!err){
-      let index = -1;
-      for(let i=0 ; i<person.memories.length ; i++){
-        if(person.memories[i]._id == editMemoryId){
-          index = i;
-          break;
-        }
-      }
-      res.render("edit", {memory: person.memories[index]});
+      res.render("edit", {memory: person.memories[0]});
     }
-  })
+  });
 })
 app.post("/edit", (req, res) => {
   Person.findOneAndUpdate({_id: loggedInPerson, "memories._id": editMemoryId},
@@ -122,17 +113,16 @@ app.post("/edit", (req, res) => {
                           (err, result) => {
                               res.redirect("/memories");
   });
-
 })
-app.post("/delete", (req, res) => {
-  console.log(req.body[0]);
 
-  Person.updateOne({_id: loggedInPerson}, {$pull: {memories: { _id: req.body.deleteMemoryId}}}, (err, result) => {
+app.get("/delete/:id", (req, res) => {
+  Person.updateOne({_id: loggedInPerson}, {$pull: {memories: { _id: req.params.id}}}, (err, result) => {
     if(!err){
       res.redirect("/memories");
     }
   })
 })
+
 app.get("/signin", (req, res) => {
   res.render("signin");
 })
@@ -222,5 +212,5 @@ app.get("/signout", (req, res) => {
 })
 
 app.listen(process.env.PORT || 3000, () => {
-  console.log("Server is running at port 3000");
+  console.log("Server is running");
 })

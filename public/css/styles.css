@@ -80,11 +80,15 @@ a{
   color:#fa8884;
   opacity: 0.8;
 }
+.memories{
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  text-align: center;
+}
 .memory-display{
   display: inline-block;
-  margin: 1%;
-  margin-top: 3%;
-  margin-right: 3%;
+  margin: 3% 1%;
 }
 .memory-date{
   text-align: center;
@@ -93,7 +97,7 @@ a{
   background-color: rgba(255, 255, 255, 0.8);
   margin-bottom: 0;
   padding-top: 2%;
-  width: 300px;
+  width: 280px;
   height: 40px;
 }
 .memory-description{
@@ -104,8 +108,13 @@ a{
   opacity: 0.6;
   margin-bottom: 0;
   padding: 3% 2% 2% 2%;
-  width: 300px;
+  width: 280px;
   height: 130px;
+}
+.display-icon{
+  font-size: 1.5em;
+  color: #fa8884;
+  margin-left: 5px;
 }
 .icons{
   display: flex;
@@ -113,7 +122,7 @@ a{
   background-color: #fff;
   border-radius: 0 0 25px 25px;
   margin: 0;
-  width: 300px;
+  width: 280px;
   height: 40px;
 }
 .icons .fa{
@@ -127,7 +136,7 @@ a{
 }
 .add-memory{
 	position:fixed;
-  right: 40px;
+  right: 5vw;
   bottom: 0px;
 	padding:0px;
 	margin:0px;

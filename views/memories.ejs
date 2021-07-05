@@ -6,49 +6,44 @@
     <%- include('partials/navbar.ejs'); %>
     <div class="container">
       <h2 class="memories-title">Have yet another happy day storing and remebering your beautiful memories... ❤️</h2>
-      <% memories.forEach(memory => { %>
-        <div class="memory-display">
-          <p class="memory-date"><%= memory.date %></p>
-          <p class="memory-description">
-            <%= memory.description.substring(0, 120) %>
-            <% if(memory.description.length > 120) { %>
-              . . .
-            <% } %>
-            <a href="#" data-bs-toggle="modal" data-bs-target="<%= '#'+memory._id %>">Display Full Memory</a>
-          </p>
-          <div class="icons">
-            <a onclick="document.getElementById('edit-form').submit();"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-            <a onclick="document.getElementById('delete-form').submit();"><i class="fa fa-trash" aria-hidden="true"></i></a>
-          </div>
+      <div class="memories">
+        <% memories.forEach(memory => { %>
+          <div class="memory-display">
+            <p class="memory-date"><%= memory.date %></p>
+            <p class="memory-description">
+              <%= memory.description.substring(0, 120) %>
+              <% if(memory.description.length > 120) { %>
+                . . .
+              <% } %>
+              <a href="#" data-bs-toggle="modal" data-bs-target="#display<%=memory._id %>"><i class="fa fa-eye display-icon" aria-hidden="true"></i></a>
+            </p>
+            <div class="icons">
+              <a href="/edit/<%= memory._id %>"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+              <a href="/delete/<%= memory._id %>"><i class="fa fa-trash" aria-hidden="true"></i></a>
+            </div>
 
-          <form id="delete-form" action="/delete" method="post">
-            <input type="hidden" name="<%= 'deleteMemoryId'+ memory._id %>" value="<%= memory._id %>">
-          </form>
-          <form id="edit-form" action="/edit-this-memory" method="post">
-            <input type="hidden" name="<%= 'editMemoryId'+ memory._id %>" value="<%= memory._id %>">
-          </form>
-
-          <div class="modal fade" id="<%= memory._id %>" tabindex="-1" role="dialog" aria-labelledby="displayAllTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h4 class="modal-title" id="displayAllTitle"><%= memory.date %></h4>
-                  <button type="button" class="close btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">
-                    <i class="fa fa-times" aria-hidden="true"></i>
-                  </button>
-                </div>
-                <div class="modal-body">
-                  <p><strong><%= memory.words %></strong></p>
-                  <p><%= memory.description %></p>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-custom" data-dismiss="modal">Close</button>
+            <div class="modal fade" id="display<%= memory._id %>" tabindex="-1" role="dialog" aria-labelledby="displayAllTitle" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h4 class="modal-title" id="displayAllTitle"><%= memory.date %></h4>
+                    <button type="button" class="close btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">
+                      <i class="fa fa-times" aria-hidden="true"></i>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <p><strong><%= memory.words %></strong></p>
+                    <p><%= memory.description %></p>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-custom" data-bs-dismiss="modal">Close</button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      <% }) %>
+        <% }) %>
+      </div>
     </div>
 
     <div class="add-memory ms-auto">
