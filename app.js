@@ -97,7 +97,7 @@ app.post("/new", (req, res) => {
 });
 
 app.post("/edit-this-memory", (req, res) => {
-  editMemoryId = req.body.memoryId;
+  editMemoryId = req.body.editMemoryId;
   res.redirect("edit");
 })
 app.get("/edit", (req, res) => {
@@ -125,7 +125,9 @@ app.post("/edit", (req, res) => {
 
 })
 app.post("/delete", (req, res) => {
-  Person.updateOne({_id: loggedInPerson}, {$pull: {memories: { _id: req.body.memoryId}}}, (err, result) => {
+  console.log(req.body[0]);
+
+  Person.updateOne({_id: loggedInPerson}, {$pull: {memories: { _id: req.body.deleteMemoryId}}}, (err, result) => {
     if(!err){
       res.redirect("/memories");
     }

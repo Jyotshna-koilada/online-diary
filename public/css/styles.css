@@ -63,13 +63,15 @@ a{
 .block{
   background-color: rgba(250, 136, 132, 0.7);
   border-radius: 25px;
-  height: 50vh;
   padding: 5vh;
-  margin: 5vh auto;
+  margin: 5vh 10vw;
 }
 .block-image{
-  width: 45vw;
-  height: 40vh;
+  height: 30vh;
+  margin: 2vh auto;
+}
+.block-content{
+  margin: 2vh auto;
 }
 /*memories page*/
 .memories-title{

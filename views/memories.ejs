@@ -13,8 +13,8 @@
             <%= memory.description.substring(0, 120) %>
             <% if(memory.description.length > 120) { %>
               . . .
-              <a href="#" data-bs-toggle="modal" data-bs-target="#displayAll">Display Full Memory</a>
             <% } %>
+            <a href="#" data-bs-toggle="modal" data-bs-target="<%= '#'+memory._id %>">Display Full Memory</a>
           </p>
           <div class="icons">
             <a onclick="document.getElementById('edit-form').submit();"><i class="fa fa-pencil" aria-hidden="true"></i></a>
@@ -22,13 +22,13 @@
           </div>
 
           <form id="delete-form" action="/delete" method="post">
-            <input type="hidden" name="memoryId" value="<%= memory._id %>">
+            <input type="hidden" name="<%= 'deleteMemoryId'+ memory._id %>" value="<%= memory._id %>">
           </form>
           <form id="edit-form" action="/edit-this-memory" method="post">
-            <input type="hidden" name="memoryId" value="<%= memory._id %>">
+            <input type="hidden" name="<%= 'editMemoryId'+ memory._id %>" value="<%= memory._id %>">
           </form>
 
-          <div class="modal fade" id="displayAll" tabindex="-1" role="dialog" aria-labelledby="displayAllTitle" aria-hidden="true">
+          <div class="modal fade" id="<%= memory._id %>" tabindex="-1" role="dialog" aria-labelledby="displayAllTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
               <div class="modal-content">
                 <div class="modal-header">
