@@ -5,29 +5,52 @@
     <title>Sign In</title>
     <%- include('partials/loggedout-navbar.ejs'); %>
     <div class="container">
-      <div class="col-12 col-md-8 offset-md-2">
-        <div class="container-fluid">
-          <form class="form" action="/signin" method="post">
-            <div class="mb-3">
-              <label for="inputEmail" class="form-label">Email address <p class="required-field">*</p></label>
-              <input required type="email" class="form-control" name="username" id="inputEmail" placeholder="Enter Your Email Address">
-            </div>
-            <div class="mb-3">
-              <label for="inputPassword" class="form-label">Password <p class="required-field">*</p></label>
-              <div class="row">
-                <div class="col-10">
-                  <input required type="password" class="col-10 form-control" name="password" id="inputPassword" placeholder="Enter Your Password">
-                </div>
-                <div class="col-2 middle">
-                  <i onclick="togglePasswordVisibility(this, 'inputPassword')" class="col-2 fa fa-eye fa-1-5x"></i>
+      <div class="row">
+        <div class="col-12 col-lg-6">
+          <div class="container-fluid">
+            <form class="form" action="/signin" method="post">
+              <div class="mb-3">
+                <label for="inputEmail" class="form-label">Email address <p class="required-field">*</p></label>
+                <input required type="email" class="form-control" name="username" id="inputEmail" placeholder="Enter Your Email Address">
+              </div>
+              <div class="mb-3">
+                <label for="inputPassword" class="form-label">Password <p class="required-field">*</p></label>
+                <div class="row">
+                  <div class="col-10">
+                    <input required type="password" class="col-10 form-control" name="password" id="inputPassword" placeholder="Enter Your Password">
+                  </div>
+                  <div class="col-2 middle">
+                    <i onclick="togglePasswordVisibility(this, 'inputPassword')" class="col-2 fa fa-eye fa-1-5x"></i>
+                  </div>
                 </div>
               </div>
+              <button type="submit" class="btn btn-custom btn-style">Sign In !!</button>
+              <div class="container-fluid right-text">
+                <a href="/signup">No account yet? Create one here</a>
+              </div>
+            </form>
+            <div class="container-fluid right-text forgot">
+              <a href="/forgot">Forgot password?</a>
             </div>
-            <button type="submit" class="btn btn-custom btn-style">Sign In !!</button>
-            <div class="container-fluid right-text">
-              <a href="/signup">No account yet? Create one here</a>
-            </div>
-          </form>
+          </div>
+        </div>
+
+        <div class="social-buttons col-12 col-lg-6 text-align">
+          <h4>Or sign in here !!</h4>
+          <div class="container">
+            <a class="btn btn-block btn-social btn-lg btn-google" href="auth/google">
+              <span class="fa fa-google"></span> Sign in with Google
+            </a>
+            <a class="btn btn-block btn-social btn-lg btn-facebook" href="auth/facebook">
+              <span class="fa fa-facebook"></span> Sign in with Facebook
+            </a>
+            <!-- <a class="btn btn-block btn-social btn-lg btn-instagram" href="auth/instagram">
+              <span class="fa fa-instagram"></span> Sign in with Instagram
+            </a> -->
+            <a class="btn btn-block btn-social btn-lg btn-twitter" href="auth/twitter">
+              <span class="fa fa-twitter"></span> Sign in with Twitter
+            </a>
+          </div>
         </div>
       </div>
     </div>

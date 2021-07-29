@@ -8,6 +8,14 @@ const passport = require('passport');
 const passportLocalMongoose = require('passport-local-mongoose');
 const nodemailer = require('nodemailer');
 const multiparty = require('multiparty');
+const fs = require('fs');
+const path = require('path');
+const multer = require('multer');
+const findOrCreate = require('mongoose-findorcreate');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const FacebookStrategy = require('passport-facebook').Strategy;
+const InstagramStrategy = require('passport-instagram').Strategy;
+const TwitterStrategy = require('passport-twitter').Strategy;
 
 const app = express();
 
@@ -33,17 +41,23 @@ mongoose.connect(uri, {
 const personMemoriesSchema = new mongoose.Schema({
   date: String,
   words: String,
-  description: String
+  description: String,
+  img:
+    {
+        data: Buffer,
+        contentType: String
+    }
 });
 
 const personSchema = new mongoose.Schema({
   personName: String,
-  email: String,
+  username: String,
   password: String,
   memories: [personMemoriesSchema]
 });
 
 personSchema.plugin(passportLocalMongoose);
+personSchema.plugin(findOrCreate);
 
 const Person = mongoose.model("Person", personSchema);
 const PersonMemories = mongoose.model("PersonMemories", personMemoriesSchema);
@@ -60,13 +74,119 @@ passport.deserializeUser((id, done) => {
 
 let loggedInPerson = "", editMemoryId = "";
 
+passport.use(new GoogleStrategy({
+  clientID: process.env.GOOGLE_CLIENT_ID,
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  callbackURL: "http://localhost:3000/auth/google/memories",
+  userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
+},
+function(accessToken, refreshToken, profile, cb) {
+  Person.findOrCreate({ username: profile.id, personName: profile.displayName }, function (err, user) {
+    loggedInPerson = user._id;
+    return cb(err, user);
+  });
+}
+));
+
+passport.use(new FacebookStrategy({
+  clientID: process.env.FACEBOOK_APP_ID,
+  clientSecret: process.env.FACEBOOK_APP_SECRET,
+  callbackURL: "http://localhost:3000/auth/facebook/memories"
+},
+function(accessToken, refreshToken, profile, cb) {
+  Person.findOrCreate({ username: profile.id, personName: profile.displayName }, function (err, user) {
+    loggedInPerson = user._id;
+    return cb(err, user);
+  });
+}
+));
+
+passport.use(new InstagramStrategy({
+  clientID: process.env.INSTAGRAM_CLIENT_ID,
+  clientSecret: process.env.INSTAGRAM_CLIENT_SECRET,
+  callbackURL: "https://localhost:3000/auth/instagram/memories"
+},
+function(accessToken, refreshToken, profile, done) {
+  Person.findOrCreate({ username: profile.id, personName: displayName }, function (err, user) {
+    console.log(profile);
+    return done(err, user);
+  });
+}
+));
+
+passport.use(new TwitterStrategy({
+  consumerKey: process.env.TWITTER_CONSUMER_KEY,
+  consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
+  callbackURL: "http://localhost:3000/auth/twitter/memories"
+},
+function(token, tokenSecret, profile, cb) {
+  Person.findOrCreate({ username: profile.id, personName: profile.displayName }, function (err, user) {
+    loggedInPerson = user._id;
+    return cb(err, user);
+  });
+}
+));
+
+var storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+      cb(null, 'Mirror')
+  },
+  filename: (req, file, cb) => {
+      cb(null, file.fieldname + '-' + Date.now())
+  }
+});
+
+var upload = multer({ storage: storage });
+
 app.get("/", (req, res) => {
   res.render("home");
 });
 
+app.get('/auth/google',
+  passport.authenticate('google', { scope: ['profile']}));
+
+app.get('/auth/google/memories', 
+  passport.authenticate('google', { failureRedirect: '/signin' }),
+  function(req, res) {
+    // Successful authentication, redirect home.
+    res.redirect('/memories');
+  });
+
+app.get('/auth/facebook',
+  passport.authenticate('facebook'));
+
+app.get('/auth/facebook/memories',
+  passport.authenticate('facebook', { failureRedirect: '/signin' }),
+  function(req, res) {
+    // Successful authentication, redirect home.
+    res.redirect('/memories');
+  });
+
+app.get('/auth/instagram',
+  passport.authenticate('instagram', {scope: ['user_profile']}));
+
+app.get('/auth/instagram/memories', 
+  passport.authenticate('instagram', { failureRedirect: '/signin' }),
+  function(req, res) {
+    // Successful authentication, redirect home.
+    res.redirect('/memories');
+  });
+
+  app.get('/auth/twitter',
+  passport.authenticate('twitter'));
+
+app.get('/auth/twitter/memories', 
+  passport.authenticate('twitter', { failureRedirect: '/signin' }),
+  function(req, res) {
+    // Successful authentication, redirect home.
+    res.redirect('/memories');
+  });
+
 app.get("/memories", (req, res) => {
   if (req.isAuthenticated()){
     Person.findById(loggedInPerson, (err, person) => {
+      if(err)
+        console.log(err);
       if(!err){
         res.render("memories", {memories: person.memories});
       }
@@ -87,7 +207,19 @@ app.post("/new", (req, res) => {
     date: req.body.date,
     words: req.body.word,
     description: req.body.description
-  })
+  });
+  console.log(req.body);
+  console.log(req.body.image === '');
+  if(!(req.body.image === '')){
+    const picture = {
+      data: fs.readFileSync(path.join(__dirname + '/uploads/' + loggedInPerson + '/' + req.body.image)),
+      contentType: 'image/png'
+    }
+    newMemory[img] = picture;
+  }
+
+  console.log(newMemory);
+
   Person.findByIdAndUpdate(loggedInPerson, {$push: {memories: newMemory}}, (err, person) => {
     if(!err)
       res.redirect("/memories");
@@ -132,6 +264,27 @@ app.post("/signin", passport.authenticate('local', {failureRedirect: "/signup"})
   res.redirect("/memories");
 });
 
+app.get("/forgot", (req, res) => {
+  res.render("forgotpassword");
+})
+app.post("/forgot", (req, res) => {
+  Person.findOne({username: req.body.username}, (err, person) => {
+    if(person === null){
+      res.redirect("/signup");
+    }
+    else{
+      person.setPassword(req.body.password, (error, user) => {
+        if(error){
+          res.redirect("/signup");
+        }
+        else{
+          user.save();
+        }
+      })
+    }
+  })
+});
+
 app.route("/signup")
   .get((req, res) => {
     res.render("signup");
@@ -139,7 +292,7 @@ app.route("/signup")
   .post((req, res) => {
     const newPerson = new Person({
       personName: req.body.fname+" "+req.body.lname,
-      username: req.body.email
+      username: req.body.username
     });
     Person.register(newPerson, req.body.password, (err, user) => {
       if (err) {
